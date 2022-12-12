@@ -1,10 +1,10 @@
 const express = require("express");
-const userRoute = require("./routes/user/User");
+const authRoute = require("./routes/auth");
 require('dotenv').config();
 
 const app = express();
 
-app.use("", userRoute);
+app.use("", authRoute);
 
 app.listen(process.env.PORT, (error) => {
 	if (error) {
