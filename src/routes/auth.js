@@ -91,7 +91,7 @@ function createJWT(userId) {
     const token = jwt.sign({
         userId: userId
     },
-        process.env.JWT_SECRETE,
+        process.env.JWT_SECRET,
         {
             expiresIn: "1m",
             issuer: "HRV-Mart",
@@ -116,7 +116,7 @@ function emailValiator(email) {
     }
 }
 function generateHashedPassword(password) {
-    return crypto.createHash("sha256", process.env.HASH_SECRETE)
+    return crypto.createHash("sha256", process.env.HASH_SECRET)
         .update(password)
         .digest("hex");
 }
