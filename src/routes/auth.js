@@ -1,9 +1,11 @@
 const router = require("express").Router();
 const crypto = require('crypto');
-const axios = require("axios");
-const jwt = require("jsonwebtoken");
+const { createJWT } = require("./../middleware/authenticate");
+const { fetchData } = require("./../networking/backendCall");
+const { getSecret } = require("../secretManager/secret");
+
 const PASSWORD_INVALID = "Password is too short"
-const EMAIL_INVALID = "Email id is not valid"
+const EMAIL_INVALID = "Email ID is not valid"
 
 router.post("/login", async (req, res) => {
     const password = req.body.password;
@@ -17,38 +19,36 @@ router.post("/login", async (req, res) => {
     else {
         const hashPassword = generateHashedPassword(password)
         // Send email and password to backend server to login
-        const data = JSON.stringify({
+        const data = {
             "email": email,
             "hashedPassword": hashPassword
-        });
-        const config = {
-            method: 'post',
-            url: `${process.env.BACKEND_URL}/auth/login`,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: data
         };
-        axios(config)
-            .then(function (response) {
-                const result = JSON.stringify(response.data);
-                if (result == "false") {
-                    res.status(400).send("Login Failed")
+        const path = "auth/login"
+        fetchData(
+            path, data, {
+            'Content-Type': 'application/json'
+        }, 'POST',
+            (error, result) => {
+                if (error) {
+                    console.error(error);
+                    res.status(500).status(error.message);
                 }
                 else {
-                    // Create JWT and send it to user
-                    const token = createJWT(email)
-                    res.status(200).json(
-                        {
-                            jwt: token,
-                        }
-                    )
+                    if (result == "false") {
+                        res.status(400).send("Login Failed")
+                    }
+                    else {
+                        // Create JWT and send it to user
+                        const token = createJWT(email)
+                        res.status(200).json(
+                            {
+                                jwt: token,
+                            }
+                        )
+                    }
                 }
-            })
-            .catch(function (error) {
-                console.log(error);
-                res.status(500).send(error.message);
-            });
+            }
+        )
     }
 })
 router.post("/signUp", async (req, res) => {
@@ -64,43 +64,22 @@ router.post("/signUp", async (req, res) => {
     else {
         const hashPassword = generateHashedPassword(password)
         // Send email and password to backend server to sign up
-        const data = JSON.stringify({
+        const data = {
             "email": email,
             "hashedPassword": hashPassword
-        });
-        const config = {
-            method: 'post',
-            url: `${process.env.BACKEND_URL}/auth/signUp`,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: data
         };
-        axios(config)
-            .then(function (response) {
-                console.log(response)
-                res.status(200).send("User created successfully");
-            })
-            .catch(function (error) {
-                console.log(error)
+        fetchData("auth/signUp", data, {
+            'Content-Type': 'application/json'
+        }, "POST", (error, result) => {
+            if (error) {
                 res.status(500).send("Unable to create user with given credentials");
-            });
+            }
+            else {
+                res.status(200).send("User created successfully");
+            }
+        })
     }
 })
-
-function createJWT(userId) {
-    const token = jwt.sign({
-        userId: userId,
-        type: "user"
-    },
-        process.env.JWT_SECRET,
-        {
-            expiresIn: "10m",
-            issuer: "HRV-Mart",
-        }
-    )
-    return token
-}
 function passwordValidator(password) {
     if (password == null || password.length < 8) {
         return false
@@ -118,7 +97,7 @@ function emailValiator(email) {
     }
 }
 function generateHashedPassword(password) {
-    return crypto.createHash("sha256", process.env.HASH_SECRET)
+    return crypto.createHash("sha256", getSecret("HASH_SECRET"))
         .update(password)
         .digest("hex");
 }
