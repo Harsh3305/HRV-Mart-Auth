@@ -47,7 +47,40 @@ router.post("/login", async (req, res) => {
     }
 })
 router.post("/signUp", async (req, res) => {
+    const password = req.body.password;
+    const email = req.body.email;
 
+    if (!passwordValidator(password)) {
+        res.status(500).send(PASSWORD_INVALID)
+    }
+    else if (!emailValiator(email)) {
+        res.status(500).send(EMAIL_INVALID)
+    }
+    else {
+        const hashPassword = generateHashedPassword(password)
+        // Send email and password to backend server to sign up
+        const data = JSON.stringify({
+            "email": email,
+            "hashedPassword": hashPassword
+        });
+        const config = {
+            method: 'post',
+            url: `${process.env.BACKEND_URL}/auth/signUp`,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+        axios(config)
+            .then(function (response) {
+                console.log(response)
+                res.status(200).send("User created successfully");
+            })
+            .catch(function (error) {
+                console.log(error)
+                res.status(500).send("Unable to create user with given credentials");
+            });
+    }
 })
 
 function createJWT(userId) {
