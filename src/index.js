@@ -1,8 +1,8 @@
 const express = require("express");
 const cors = require("cors");
+const { json } = require("express")
 const authRoute = require("./routes/auth");
 const homeRoute = require("./routes/home");
-const { json } = require("express");
 require('dotenv').config();
 
 const app = express();
