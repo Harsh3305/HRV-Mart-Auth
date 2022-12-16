@@ -1,4 +1,4 @@
 function getSecret(key) {
-    return process.env[key] || "Secret not found"
+    return process.env[key] || "3000"
 }
 module.exports = { getSecret }
