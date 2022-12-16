@@ -40,7 +40,7 @@ router.post("/login", async (req, res) => {
                     const token = createJWT(email)
                     res.status(200).json(
                         {
-                            jwt: token
+                            jwt: token,
                         }
                     )
                 }
@@ -87,13 +87,15 @@ router.post("/signUp", async (req, res) => {
             });
     }
 })
+
 function createJWT(userId) {
     const token = jwt.sign({
-        userId: userId
+        userId: userId,
+        type: "user"
     },
         process.env.JWT_SECRET,
         {
-            expiresIn: "1m",
+            expiresIn: "10m",
             issuer: "HRV-Mart",
         }
     )

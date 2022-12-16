@@ -1,11 +1,16 @@
 const express = require("express");
+const cors = require("cors");
 const { json } = require("express")
 const authRoute = require("./routes/auth");
+const homeRoute = require("./routes/home");
 require('dotenv').config();
 
 const app = express();
-app.use(json())
+
+app.use(cors());
+app.use(json());
 app.use("", authRoute);
+app.use("", homeRoute);
 
 app.listen(process.env.PORT, (error) => {
 	if (error) {
