@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const crypto = require('crypto');
 const { createJWT } = require("./../middleware/authenticate");
-const { fetchData } = require("./../networking/backendCall");
+const { postRequest } = require("./../networking/backendCall");
 const { getSecret } = require("../secretManager/secret");
 
 const PASSWORD_INVALID = "Password is too short"
@@ -24,10 +24,10 @@ router.post("/login", async (req, res) => {
             "hashedPassword": hashPassword
         };
         const path = "auth/login"
-        fetchData(
+        postRequest(
             path, data, {
             'Content-Type': 'application/json'
-        }, 'POST',
+        },
             (error, result) => {
                 if (error) {
                     console.error(error);
@@ -54,6 +54,9 @@ router.post("/login", async (req, res) => {
 router.post("/signUp", async (req, res) => {
     const password = req.body.password;
     const email = req.body.email;
+    const image = req.body.image;
+    const name = req.body.name;
+    const address = req.body.address;
 
     if (!passwordValidator(password)) {
         res.status(500).send(PASSWORD_INVALID)
@@ -68,14 +71,33 @@ router.post("/signUp", async (req, res) => {
             "email": email,
             "hashedPassword": hashPassword
         };
-        fetchData("auth/signUp", data, {
+        postRequest("auth/signUp", data, {
             'Content-Type': 'application/json'
-        }, "POST", (error, result) => {
+        }, (error, result) => {
             if (error) {
+                console.log(error);
                 res.status(500).send("Unable to create user with given credentials");
             }
             else {
-                res.status(200).send("User created successfully");
+                postRequest(
+                    "user/login/",
+                    {
+                        email: email,
+                        name: name,
+                        image: image,
+                        address: address
+                    },
+                    { 'Content-Type': 'application/json' },
+                    (error, result) => {
+                        if (error) {
+                            // TODO: Delete auth of this user
+                            res.status(500).send("Internal Server Error");
+                        }
+                        else {
+                            res.status(200).send("User created successfully");
+                        }
+                    }
+                )
             }
         })
     }
