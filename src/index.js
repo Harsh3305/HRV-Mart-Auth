@@ -15,7 +15,7 @@ app.use("", authRoute);
 app.use("", userProfileRoute);
 app.use("/user/cart", userCartRoute);
 
-app.listen(getSecret("PORT"), (error) => {
+app.listen(3000, (error) => {
 	if (error) {
 		console.error(error);
 	}
