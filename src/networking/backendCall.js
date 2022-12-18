@@ -1,4 +1,3 @@
-var axios = require('axios');
 var request = require('request');
 const { getSecret } = require("./../secretManager/secret")
 
