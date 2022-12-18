@@ -1,7 +1,12 @@
 const { verify } = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const { getSecret } = require("./../secretManager/secret")
 
 const BEARER = "bearer";
 const INVALID_TOKEN = "Please send a valid token";
+const ACCESS_DENIED = "You don't have access to do this operation";
+const USER_TYPE = "user";
+const ADMIN_TYPE = "admin";
 
 function isAuthenticated(req, res, next) {
     try {
@@ -17,7 +22,7 @@ function isAuthenticated(req, res, next) {
             res.status(401).send(INVALID_TOKEN);
         }
         else {
-            verify(jwt, process.env.JWT_SECRET, (error, decodedMessage) => {
+            verify(jwt, getSecret("JWT_SECRET"), (error, decodedMessage) => {
                 if (error || decodedMessage == "") {
                     console.error(error)
                     res.status(400).send(INVALID_TOKEN);
@@ -35,6 +40,38 @@ function isAuthenticated(req, res, next) {
     catch (error) {
         res.status(401).send(INVALID_TOKEN)
     }
-
 }
-module.exports = { isAuthenticated }
+function isUser(req, res, next) {
+    isAuthenticated(req, res, () => {
+        if (req.user.type == USER_TYPE) {
+            next();
+        }
+        else {
+            res.status(401).send(ACCESS_DENIED);
+        }
+    })
+}
+function isAdmin(req, res, next) {
+    isAuthenticated(req, res, () => {
+        if (req.user.type == ADMIN_TYPE) {
+            next();
+        }
+        else {
+            res.status(401).send(ACCESS_DENIED);
+        }
+    })
+}
+function createJWT(userId) {
+    const token = jwt.sign({
+        userId: userId,
+        type: USER_TYPE
+    },
+        getSecret("JWT_SECRET"),
+        {
+            expiresIn: "10m",
+            issuer: "HRV-Mart",
+        }
+    )
+    return token
+}
+module.exports = { isAdmin, isUser, createJWT }
