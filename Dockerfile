@@ -1,4 +1,4 @@
-FROM node:lasest
+FROM node
 
 WORKDIR /usr/src/app
 
