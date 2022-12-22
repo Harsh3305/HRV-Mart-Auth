@@ -12,11 +12,11 @@ async function fetchData(path, body, headers, type, next) {
         if (error || response.statusCode != 200) {
             if (error == null) {
                 error = {};
+                error.response = {
+                    statusCode: response.statusCode,
+                    body: response.body
+                };
             }
-            error.response = {
-                statusCode: response.statusCode,
-                body: response.body
-            };
             next(error, null);
         }
         else {
