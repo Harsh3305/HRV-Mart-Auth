@@ -21,7 +21,7 @@ router.get("", isUser, async (req, res) => {
                 }
             }
             else {
-                res.status(200).json(result);
+                res.status(200).json(JSON.parse(result));
             }
         }
     )
