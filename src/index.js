@@ -7,6 +7,7 @@ const userCartRoute = require("./routes/user/cart");
 const userCommentRouter = require("./routes/user/comment");
 const userLikeRouter = require("./routes/user/like");
 const userRatingRouter = require("./routes/user/rating");
+const userVoteRouter = require("./routes/user/vote");
 const noAuthProductRouter = require("./routes/noauth/product");
 const noAuthCommentRouter = require("./routes/noauth/comment");
 const noAuthLikeRouter = require("./routes/noauth/like");
@@ -28,6 +29,7 @@ app.use("/like", userLikeRouter);
 app.use("/like", noAuthLikeRouter);
 app.use("/rating", userRatingRouter);
 app.use("/rating", noAuthRatingRouter);
+app.use("/vote", userVoteRouter);
 
 app.listen(3000, (error) => {
 	if (error) {
