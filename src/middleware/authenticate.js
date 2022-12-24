@@ -43,7 +43,7 @@ function isAuthenticated(req, res, next) {
 }
 function isUser(req, res, next) {
     isAuthenticated(req, res, () => {
-        if (req.user.type == USER_TYPE) {
+        if (req.user.type == USER_TYPE || req.user.type == ADMIN_TYPE) {
             next();
         }
         else {
