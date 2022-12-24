@@ -5,7 +5,7 @@
 ## About Project
 Authentication server and API-Gateway for HRV-Mart website.
 
-## Installation
+## Installation using NPM
 1) Clone this repo.
 ```
 git clone git@github.com:Harsh3305/HRV-Mart-Auth.git
@@ -30,6 +30,10 @@ BACKEND_URL=http://localhost:8080
 5) Run on local
 ```
 npm run dev
+```
+## Installation using Docker 
+```
+docker run  --name HRV-Mart-Auth -it --init --net="host" -d harsh3305/hrv-mart-auth:master
 ```
 ## Test code on Preview server
 Create a PR on this repo. Within few minutes, you will receive a preview server url in comments to test application.
