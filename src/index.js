@@ -46,7 +46,7 @@ app.use("/vote", userVoteRouter);
 
 app.use("/order", userOrderRouter);
 
-app.listen(3000, (error) => {
+app.listen(3002, (error) => {
 	if (error) {
 		console.error(error);
 	}

@@ -11,5 +11,5 @@ COPY package*.json ./
 RUN npm i
 COPY . .
 
-EXPOSE 3000 8080
+EXPOSE 3002 8080
 CMD [ "node", "src/index.js" ]
