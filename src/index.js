@@ -43,7 +43,7 @@ app.use("/rating", noAuthRatingRouter);
 
 app.use("/vote", userVoteRouter);
 
-app.listen(3000, (error) => {
+app.listen(3002, (error) => {
 	if (error) {
 		console.error(error);
 	}
