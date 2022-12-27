@@ -4,7 +4,7 @@ const router = require("express").Router();
 
 router.get("/", isUser, (req, res) => {
     getRequest(
-        `order${req.url}`,
+        `order/${req.user.userId}${req.url}`,
         {},
         {},
         (error, result) => {

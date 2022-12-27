@@ -21,7 +21,7 @@ router.get("/", isUser, async (req, res) => {
     );
 });
 router.get("/cost", isUser, (req, res) => {
-    const userId = req.user.UserId;
+    const userId = req.user.userId;
     const path = `cart/cost/${userId}`;
     const body = {};
     const header = {};
@@ -119,7 +119,9 @@ router.get("/purchase", isUser, (req, res) => {
 router.delete("/", isUser, (req, res) => {
     const userId = req.user.userId;
     const productId = req.query.productId;
-
+    /**
+     * TODO: 
+     */
     const path = `cart/${userId}?productId=${productId}`
     const body = {};
     const headers = {};
