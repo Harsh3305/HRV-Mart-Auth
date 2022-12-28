@@ -17,7 +17,7 @@ router.get("", isUser, async (req, res) => {
                     res.status(404).send("User not found");
                 }
                 else {
-                    res.status(error.statusCode).json({ error: error.body })
+                    res.status(error.response.statusCode).json({ error: error.response })
                 }
             }
             else {
@@ -25,7 +25,6 @@ router.get("", isUser, async (req, res) => {
             }
         }
     )
-    res.status(200).send(req.user)
 })
 
 module.exports = router;
