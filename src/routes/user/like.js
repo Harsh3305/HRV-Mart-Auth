@@ -61,7 +61,7 @@ router.delete("/:productId", isUser, (req, res) => {
                 res.status(500).send(error)
             }
             else {
-                res.status(200).json(JSON.parse(result));
+                res.status(200).send("Like remove successfully");
             }
         }
     );
