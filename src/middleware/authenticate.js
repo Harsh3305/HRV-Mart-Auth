@@ -19,13 +19,13 @@ function isAuthenticated(req, res, next) {
             res.status(401).send(`Please use ${BEARER} as authenitcation type`);
         }
         else if (jwt == "") {
-            res.status(401).send(INVALID_TOKEN);
+            res.status(401).json({ error: INVALID_TOKEN });
         }
         else {
             verify(jwt, getSecret("JWT_SECRET"), (error, decodedMessage) => {
                 if (error || decodedMessage == "") {
                     console.error(error)
-                    res.status(400).send(INVALID_TOKEN);
+                    res.status(400).json({ error: INVALID_TOKEN });
                 }
                 else {
                     req.user = {
@@ -38,7 +38,7 @@ function isAuthenticated(req, res, next) {
         }
     }
     catch (error) {
-        res.status(401).send(INVALID_TOKEN)
+        res.status(401).json({ error: INVALID_TOKEN });
     }
 }
 function isUser(req, res, next) {
@@ -47,7 +47,7 @@ function isUser(req, res, next) {
             next();
         }
         else {
-            res.status(401).send(ACCESS_DENIED);
+            res.status(401).send({ error: ACCESS_DENIED });
         }
     })
 }
@@ -57,7 +57,7 @@ function isAdmin(req, res, next) {
             next();
         }
         else {
-            res.status(401).send(ACCESS_DENIED);
+            res.status(401).send({ error: ACCESS_DENIED });
         }
     })
 }
