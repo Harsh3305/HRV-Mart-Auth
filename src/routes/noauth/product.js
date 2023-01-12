@@ -17,7 +17,6 @@ router.get("/", (req, res) => {
     );
 });
 router.get("/search", (req, res) => {
-    // console.log(req);
     getRequest(
         `products/search?query=${req.query.query}`,
         {},

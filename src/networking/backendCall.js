@@ -2,6 +2,9 @@ var request = require('request');
 const { getSecret } = require("./../secretManager/secret")
 
 async function fetchData(path, body, headers, type, next) {
+    if (path.charAt(path.length - 1) == `/`) {
+        path = path.slice(0, path.length - 1)
+    }
     var config = {
         method: type,
         url: `${getSecret("BACKEND_URL")}/${path}`,
@@ -15,6 +18,12 @@ async function fetchData(path, body, headers, type, next) {
                 error.response = {
                     statusCode: response.statusCode,
                     body: response.body
+                };
+            }
+            else {
+                error.response = {
+                    statusCode: 500,
+                    body: error.message
                 };
             }
             next(error, null);
