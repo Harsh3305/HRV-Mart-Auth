@@ -7,7 +7,6 @@ router.get("/product/:id", (req, res) => {
         {},
         (error, result) => {
             if (error) {
-                // console.log(error);
                 res.status(500).send(error)
             }
             else {

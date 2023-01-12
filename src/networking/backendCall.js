@@ -21,6 +21,12 @@ async function fetchData(path, body, headers, type, next) {
                     body: response.body
                 };
             }
+            else {
+                error.response = {
+                    statusCode: 500,
+                    body: error.message
+                };
+            }
             next(error, null);
         }
         else {
