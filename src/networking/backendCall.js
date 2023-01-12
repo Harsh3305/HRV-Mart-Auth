@@ -3,8 +3,9 @@ const { getSecret } = require("./../secretManager/secret")
 
 async function fetchData(path, body, headers, type, next) {
     if (path.charAt(path.length - 1) == `/`) {
-        path = path.slice(0, path.length - 1)
+        path = path.slice(0, path.length - 1);
     }
+    path = path.replace("/?", "?");
     var config = {
         method: type,
         url: `${getSecret("BACKEND_URL")}/${path}`,
