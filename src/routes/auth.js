@@ -75,12 +75,11 @@ router.post("/signUp", async (req, res) => {
             'Content-Type': 'application/json'
         }, (error, result) => {
             if (error) {
-                console.log(error);
                 res.status(500).send("Unable to create user with given credentials");
             }
             else {
                 postRequest(
-                    "user/login/",
+                    "user/",
                     {
                         email: email,
                         name: name,

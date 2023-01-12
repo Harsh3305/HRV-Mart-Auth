@@ -22,7 +22,6 @@ router.post("/", isUser, (req, res) => {
     );
 });
 router.get("/", isUser, (req, res) => {
-    console.log(req.url);
     getRequest(`like/allLikes/${req.user.userId}${req.url}`,
         {},
         {},
