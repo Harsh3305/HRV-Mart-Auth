@@ -11,7 +11,7 @@ router.get("/", isUser, async (req, res) => {
         body,
         headers,
         (error, result) => {
-            if (error) {
+            if (error || result == '') {
                 res.status(404).send("Cart not found");
             }
             else {
